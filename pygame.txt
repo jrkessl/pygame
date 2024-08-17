@@ -1,0 +1,6 @@
+2024-08-17
+    comandos pra começar:
+        cd pygame/
+        python3 -m venv pygame-venv
+        source pygame-venv/bin/activate
+        python3 -m pip install -U pygame 
