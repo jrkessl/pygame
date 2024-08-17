@@ -1,6 +1,6 @@
 import pygame, sys
 from pygame.locals import *
-import random
+import random, time
  
 pygame.init()
  
@@ -22,7 +22,7 @@ DISPLAYSURF = pygame.display.set_mode((400,600))
 DISPLAYSURF.fill(WHITE)
 pygame.display.set_caption("Game")
  
- 
+
 class Enemy(pygame.sprite.Sprite):
     left = False 
     contadorVirada = 0
@@ -59,7 +59,6 @@ class Enemy(pygame.sprite.Sprite):
     def draw(self, surface):
         surface.blit(self.image, self.rect) 
  
- 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__() 
@@ -93,7 +92,14 @@ class Player(pygame.sprite.Sprite):
          
 P1 = Player()
 E1 = Enemy()
- 
+
+#Creating Sprites Groups
+enemies = pygame.sprite.Group()
+enemies.add(E1)
+all_sprites = pygame.sprite.Group()
+all_sprites.add(P1)
+all_sprites.add(E1)
+
 while True:     
     for event in pygame.event.get():              
         if event.type == QUIT:
@@ -101,6 +107,20 @@ while True:
             sys.exit()
     P1.update()
     E1.move()
+
+    # detecção de colisão
+    if pygame.sprite.spritecollideany(P1, enemies): # detecta colisão 
+        new_image = pygame.image.load("explodido-generico.png") # carrega imagem 
+        P1.image = new_image # seta nova imagem no player e enemy 
+        E1.image = new_image
+        DISPLAYSURF.blit(E1.image, E1.rect) # "renderiza" a nova imagem no player e enemy 
+        DISPLAYSURF.blit(P1.image, P1.rect)
+        pygame.display.update() # atualiza a tela 
+        # for entity in all_sprites: # remove todas as sprites da tela 
+        #     entity.kill() 
+        time.sleep(2)
+        pygame.quit()
+        sys.exit()     
      
     DISPLAYSURF.fill(WHITE)
     P1.draw(DISPLAYSURF)
