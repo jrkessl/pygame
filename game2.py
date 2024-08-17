@@ -49,23 +49,23 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = (160, 520)
  
     def update(self):
-        pressed_keys = pygame.key.get_pressed()
-       #if pressed_keys[K_UP]:
-            #self.rect.move_ip(0, -5)
-       #if pressed_keys[K_DOWN]:
-            #self.rect.move_ip(0,5)
+        pressed_keys = pygame.key.get_pressed() # pega a tecla pressionada 
          
+        
         if self.rect.left > 0:
-              if pressed_keys[K_LEFT]:
-                  self.rect.move_ip(-5, 0)
+            if pressed_keys[K_LEFT]:
+                self.rect.move_ip(-5, 0)
         if self.rect.right < SCREEN_WIDTH:        
-              if pressed_keys[K_RIGHT]:
-                  self.rect.move_ip(5, 0)
+            if pressed_keys[K_RIGHT]:
+                self.rect.move_ip(5, 0)
 
         if pressed_keys[K_UP]:
-            self.rect.move_ip(0, -5)
-        if pressed_keys[K_DOWN]:
-            self.rect.move_ip(0, 5)
+            if self.rect.top > 0:
+                self.rect.move_ip(0, -5)
+        
+        if pressed_keys[K_DOWN]: # se apertou pra baixo 
+            if self.rect.bottom < SCREEN_HEIGHT: # se ainda não está na borda inferior 
+                self.rect.move_ip(0, 5) # move 5 pixels pra baixo 
  
     def draw(self, surface):
         surface.blit(self.image, self.rect)     
