@@ -24,19 +24,39 @@ pygame.display.set_caption("Game")
  
  
 class Enemy(pygame.sprite.Sprite):
-      def __init__(self):
+    left = False 
+    contadorVirada = 0
+
+    def __init__(self):
         super().__init__() 
         self.image = pygame.image.load("Enemy1.png")
         self.rect = self.image.get_rect()
         self.rect.center=(random.randint(40,SCREEN_WIDTH-40),0) 
  
-      def move(self):
-        self.rect.move_ip(0,10)
+    def move(self):
+        Enemy.contadorVirada = Enemy.contadorVirada + 1 
+        random_number = random.randint(0, 1) 
+        # print(f"random_number={random_number}")
+
+        if(Enemy.contadorVirada > 40):
+            if (random_number == 0):
+                Enemy.left = True
+            else:
+                Enemy.left = False
+            Enemy.contadorVirada = 0
+            
+
+        # print(f"Enemy.left={Enemy.left}")
+        if (Enemy.left):
+            self.rect.move_ip(-1,5)
+        else:
+            self.rect.move_ip(1,5)
+
         if (self.rect.bottom > 600):
             self.rect.top = 0
             self.rect.center = (random.randint(30, 370), 0)
  
-      def draw(self, surface):
+    def draw(self, surface):
         surface.blit(self.image, self.rect) 
  
  
