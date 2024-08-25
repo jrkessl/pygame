@@ -68,9 +68,8 @@ class Player(pygame.sprite.Sprite):
     sprites_idle=[]
     velocidade_alteracao_sprite=0
     quantidade_sprites_idle=0
-    proxima_sprite=1
+    sprite_atual=0
     indo_direita=True
-    indo_esquerda=False
 
     # Inicialização do jogador 
     def __init__(self):
@@ -137,10 +136,12 @@ class Player(pygame.sprite.Sprite):
         if pressed_keys[K_LEFT]: # Se apertou tecla pra esquerda
             if self.rect.left > 0: # Se ainda não encostou na parede esquerda 
                 self.rect.move_ip(-5, 0) # Move 5 posições pra esquerda 
+                Player.indo_direita = False # Registra que agora ele está apontando pra esquerda 
 
         if pressed_keys[K_RIGHT]: # Se apertou direita 
             if self.rect.right < SCREEN_WIDTH: # Se não está encostado na margem direita 
                 self.rect.move_ip(5, 0) # Move 5 posições pra direita 
+                Player.indo_direita = True # Registra que agora ele está apontando pra direita
 
         if pressed_keys[K_UP]: # Se apertou tecla pra cima 
             if self.rect.top > 0:
@@ -150,21 +151,26 @@ class Player(pygame.sprite.Sprite):
             if self.rect.bottom < SCREEN_HEIGHT: # se ainda não está na borda inferior 
                 self.rect.move_ip(0, 5) # move 5 pixels pra baixo 
 
-        # Animação do personagem
+        # Animação do personagem: cicla a sprite, se for chegada a hora 
+        # Este bloco só cicla a sprite (calcula se é chegada a hora de ciclar ela). A atribuição da imagem correta ao jogador vem depois. 
         Player.animationCounter += 1 # Incrementa em cada loop; Define o ritmo da animação. 
-        if Player.animationCounter >= Player.velocidade_alteracao_sprite: # Quando chegar na hora de trocar a sprite:
-            self.image = Player.sprites_idle[Player.proxima_sprite] # Troca a sprite atual pela próxima da lista de sprites idle.
+        if Player.animationCounter == Player.velocidade_alteracao_sprite: # Quando chegar na hora de trocar a sprite:
             Player.animationCounter = 0 # Reinicia o contador de animação.
-            Player.proxima_sprite += 1 # Move o indicador de próxima sprite pra frente. 
-            if Player.proxima_sprite >= Player.quantidade_sprites_idle: # Se chegou no final da quantidade de sprites, volta para o início do vetor. 
-                Player.proxima_sprite = 0
-            Player.animationCounter = 0 # Zera o contador de troca de sprite. 
+            Player.sprite_atual += 1 # Move o indicador de próxima sprite pra frente. 
+            if Player.sprite_atual == Player.quantidade_sprites_idle: # Se chegou no final da quantidade de sprites, volta para o início do vetor. 
+                Player.sprite_atual = 0 
+            
+        # Atualiza a imagem do jogador 
+        # Pra atualizar temos que saber pra que lado ele está olhando e vamos usar a sprite calculada no step anterior. 
+        if Player.indo_direita: # Vê se o jogador está olhando pra direita ou esquerda 
+            self.image = Player.sprites_idle[Player.sprite_atual] # Troca a sprite atual pela próxima da lista de sprites idle.
+        else:
+            self.image = pygame.transform.flip(Player.sprites_idle[Player.sprite_atual], True, False) # Troca a sprite atual pela próxima da lista de sprites idle, mas flipada horizontalmente.
 
-
-        # elif Player.animationCounter == 20:
-        #     self.image = pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/idle1.png")
-        #     Player.animationCounter = 0
-        # self.image = pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/idle2.png")
+        # if Player.indo_direita:
+        #     print("indo direita")
+        # else:
+        #     print("indo esquerda")
  
     def draw(self, surface):
         surface.blit(self.image, self.rect)     
