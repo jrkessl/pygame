@@ -69,6 +69,8 @@ class Player(pygame.sprite.Sprite):
     velocidade_alteracao_sprite=0
     quantidade_sprites_idle=0
     proxima_sprite=1
+    indo_direita=True
+    indo_esquerda=False
 
     # Inicialização do jogador 
     def __init__(self):
@@ -132,14 +134,15 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         pressed_keys = pygame.key.get_pressed() # pega a tecla pressionada 
         
-        if self.rect.left > 0:
-            if pressed_keys[K_LEFT]:
-                self.rect.move_ip(-5, 0)
-        if self.rect.right < SCREEN_WIDTH:        
-            if pressed_keys[K_RIGHT]:
-                self.rect.move_ip(5, 0)
+        if pressed_keys[K_LEFT]: # Se apertou tecla pra esquerda
+            if self.rect.left > 0: # Se ainda não encostou na parede esquerda 
+                self.rect.move_ip(-5, 0) # Move 5 posições pra esquerda 
 
-        if pressed_keys[K_UP]:
+        if pressed_keys[K_RIGHT]: # Se apertou direita 
+            if self.rect.right < SCREEN_WIDTH: # Se não está encostado na margem direita 
+                self.rect.move_ip(5, 0) # Move 5 posições pra direita 
+
+        if pressed_keys[K_UP]: # Se apertou tecla pra cima 
             if self.rect.top > 0:
                 self.rect.move_ip(0, -5)
         
