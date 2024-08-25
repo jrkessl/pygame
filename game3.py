@@ -1,3 +1,6 @@
+# sprites vieram de: https://pixelfrog-assets.itch.io/pixel-adventure-1/download/eyJleHBpcmVzIjoxNzI0NjA2NTAxLCJpZCI6NDkwNzk4fQ%3d%3d%2euaD59gwHdVnyJNcySfSZuSzubEU%3d
+# tutorial de animação: https://www.geeksforgeeks.org/pygame-character-animation/
+
 import pygame, sys
 from pygame.locals import *
 import random, time
@@ -69,8 +72,10 @@ class Player(pygame.sprite.Sprite):
     sprites_run=[]
     velocidade_alteracao_sprite=0
     quantidade_sprites_idle=0
+    quantidade_sprites_run=0
     sprite_atual=0
     indo_direita=True
+    correndo=False
 
     # Inicialização do jogador 
     def __init__(self):
@@ -170,13 +175,12 @@ class Player(pygame.sprite.Sprite):
         imagem = pygame.transform.scale(imagem, (altura_jogador, largura_jogador)) # Escalona a imagem 
         Player.sprites_run.append(imagem) # Guarda no array pra usar depois 
 
-        # trocar todas as sprintes idle por run
-
         self.image = Player.sprites_idle[0] # Define a sprite inicial do jogador
         self.rect = self.image.get_rect() # Cria a caixa de colisão
         self.rect.center = (SCREEN_WIDTH/2, SCREEN_HEIGHT/2) # Posiciona o jogador
 
         Player.quantidade_sprites_idle = len(Player.sprites_idle) # Armazena a quantidade de sprites idle. 
+        Player.quantidade_sprites_run = len(Player.sprites_run) # Armazena a quantidade de sprites run.
         
         # Definir a velocidade de mudança das sprites idle, em número de quadros que cada sprite é exibida; Elas precisam ser todas cicladas 1 vez por segundo, independentemente de quantas sprites sejam. 
         # Player.velocidade_alteracao_sprite = int(FPS / Player.quantidade_sprites_idle) # Cicla as imagens todas 1x por segundo, independentemente de quantas imagens o player tenha; 
@@ -190,35 +194,73 @@ class Player(pygame.sprite.Sprite):
             if self.rect.left > 0: # Se ainda não encostou na parede esquerda 
                 self.rect.move_ip(-5, 0) # Move 5 posições pra esquerda 
                 Player.indo_direita = False # Registra que agora ele está apontando pra esquerda 
+                
+                # Armazena que está correndo. Vai ser preciso pra escolher a sprite. Mas precisa ver se começou a correr agora. 
+                if not Player.correndo: # Se não estava correndo até agora 
+                    Player.sprite_atual = 0 # Zera o indicador de sprite, pois vamos começar pela primeira sprite do conjunto. 
+                    Player.animationCounter = 0 # Zera o contador de animação, pois vamos trocar de sprite. 
+                    Player.correndo = True 
 
-        if pressed_keys[K_RIGHT]: # Se apertou direita 
+        elif pressed_keys[K_RIGHT]: # Se apertou direita 
             if self.rect.right < SCREEN_WIDTH: # Se não está encostado na margem direita 
                 self.rect.move_ip(5, 0) # Move 5 posições pra direita 
                 Player.indo_direita = True # Registra que agora ele está apontando pra direita
+                
+                # Armazena que está correndo. Vai ser preciso pra escolher a sprite. Mas precisa ver se começou a correr agora. 
+                if not Player.correndo: # Se não estava correndo até agora 
+                    Player.sprite_atual = 0 # Zera o indicador de sprite, pois vamos começar pela primeira sprite do conjunto. 
+                    Player.animationCounter = 0 # Zera o contador de animação, pois vamos trocar de sprite. 
+                    Player.correndo = True 
 
-        if pressed_keys[K_UP]: # Se apertou tecla pra cima 
+        elif pressed_keys[K_UP]: # Se apertou tecla pra cima 
             if self.rect.top > 0:
                 self.rect.move_ip(0, -5)
+                
+                # Armazena que está correndo. Vai ser preciso pra escolher a sprite. Mas precisa ver se começou a correr agora. 
+                if not Player.correndo: # Se não estava correndo até agora 
+                    Player.sprite_atual = 0 # Zera o indicador de sprite, pois vamos começar pela primeira sprite do conjunto. 
+                    Player.animationCounter = 0 # Zera o contador de animação, pois vamos trocar de sprite. 
+                    Player.correndo = True 
         
-        if pressed_keys[K_DOWN]: # se apertou pra baixo 
+        elif pressed_keys[K_DOWN]: # se apertou pra baixo 
             if self.rect.bottom < SCREEN_HEIGHT: # se ainda não está na borda inferior 
                 self.rect.move_ip(0, 5) # move 5 pixels pra baixo 
+                
+                # Armazena que está correndo. Vai ser preciso pra escolher a sprite. Mas precisa ver se começou a correr agora. 
+                if not Player.correndo: # Se não estava correndo até agora 
+                    Player.sprite_atual = 0 # Zera o indicador de sprite, pois vamos começar pela primeira sprite do conjunto. 
+                    Player.animationCounter = 0 # Zera o contador de animação, pois vamos trocar de sprite. 
+                    Player.correndo = True 
+            
+        else: # Se nenhuma tecla foi pressionada
+
+            # Armazena que parou de correr. Vai ser preciso pra escolher a sprite. Mas precisa ver se parou de correr agora. 
+            if Player.correndo: # Se estava correndo até agora 
+                Player.sprite_atual = 0 # Zera o indicador de sprite, pois vamos começar pela primeira sprite do conjunto. 
+                Player.animationCounter = 0 # Zera o contador de animação, pois vamos trocar de sprite. 
+                Player.correndo = False # Registra que agora ele não está mais correndo. 
 
         # Animação do personagem: cicla a sprite, se for chegada a hora 
         # Este bloco só cicla a sprite (calcula se é chegada a hora de ciclar ela). A atribuição da imagem correta ao jogador vem depois. 
-        Player.animationCounter += 1 # Incrementa em cada loop; Define o ritmo da animação. 
         if Player.animationCounter == Player.velocidade_alteracao_sprite: # Quando chegar na hora de trocar a sprite:
             Player.animationCounter = 0 # Reinicia o contador de animação.
             Player.sprite_atual += 1 # Move o indicador de próxima sprite pra frente. 
             if Player.sprite_atual == Player.quantidade_sprites_idle: # Se chegou no final da quantidade de sprites, volta para o início do vetor. 
                 Player.sprite_atual = 0 
-            
+        Player.animationCounter += 1 # Incrementa em cada loop; Define o ritmo da animação. 
+
         # Atualiza a imagem do jogador 
         # Pra atualizar temos que saber pra que lado ele está olhando e vamos usar a sprite calculada no step anterior. 
         if Player.indo_direita: # Vê se o jogador está olhando pra direita ou esquerda 
-            self.image = Player.sprites_idle[Player.sprite_atual] # Troca a sprite atual pela próxima da lista de sprites idle.
+            if Player.correndo: # Se ele está correndo
+                self.image = Player.sprites_run[Player.sprite_atual] # Troca a sprite atual pela próxima da lista de sprites run.
+            else:
+                self.image = Player.sprites_idle[Player.sprite_atual] # Troca a sprite atual pela próxima da lista de sprites idle.
         else:
-            self.image = pygame.transform.flip(Player.sprites_idle[Player.sprite_atual], True, False) # Troca a sprite atual pela próxima da lista de sprites idle, mas flipada horizontalmente.
+            if Player.correndo: # Se ele está correndo
+                self.image = pygame.transform.flip(Player.sprites_run[Player.sprite_atual], True, False) # Troca a sprite atual pela próxima da lista de sprites run, mas flipada horizontalmente.
+            else:
+                self.image = pygame.transform.flip(Player.sprites_idle[Player.sprite_atual], True, False) # Troca a sprite atual pela próxima da lista de sprites idle, mas flipada horizontalmente.
 
         # if Player.indo_direita:
         #     print("indo direita")
