@@ -19,6 +19,8 @@ WHITE = (255, 255, 255)
 # SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 1700
 SCREEN_HEIGHT = 800
+altura_jogador = 64 
+largura_jogador = 64
  
 DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 DISPLAYSURF.fill(WHITE)
@@ -76,15 +78,31 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (SCREEN_WIDTH/2, 520)
 
-        # sprites_idle = [pygame.image.load("Sprite1.png"),
-        #         pygame.image.load("Sprite2.png")]
-        
-        # Carrega o vetor de sprites idle 
-        Player.sprites_idle = [pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/idle1.png"),
-                        pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/idle2.png"),
-                        pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/idle3.png"),
-                        pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/idle4.png"),
-                        pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/idle5.png")]
+        # Carrega as sprites idle
+        imagem = pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/idle1.png") # Carrega imagem 
+        imagem = pygame.transform.scale(imagem, (altura_jogador, largura_jogador)) # Escalona a imagem 
+        Player.sprites_idle.append(imagem) # Guarda no array pra usar depois 
+
+        imagem = pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/idle2.png")
+        imagem = pygame.transform.scale(imagem, (altura_jogador, largura_jogador))
+        Player.sprites_idle.append(imagem)
+
+        imagem = pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/idle3.png")
+        imagem = pygame.transform.scale(imagem, (altura_jogador, largura_jogador))
+        Player.sprites_idle.append(imagem)
+
+        imagem = pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/idle4.png")
+        imagem = pygame.transform.scale(imagem, (altura_jogador, largura_jogador))
+        Player.sprites_idle.append(imagem)
+
+        imagem = pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/idle5.png")
+        imagem = pygame.transform.scale(imagem, (altura_jogador, largura_jogador))
+        Player.sprites_idle.append(imagem)
+
+                        # pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/idle2.png"),
+                        # pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/idle3.png"),
+                        # pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/idle4.png"),
+                        # pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/idle5.png")]
         Player.quantidade_sprites_idle = len(Player.sprites_idle) # Armazena a quantidade de sprites idle. 
         Player.velocidade_alteracao_sprite = FPS / Player.quantidade_sprites_idle # Definir a velocidade de mudança das sprites idle; Elas precisam ser todas cicladas 1 vez por segundo, independentemente de quantas sprites sejam. 
  
