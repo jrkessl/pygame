@@ -66,6 +66,7 @@ class Enemy(pygame.sprite.Sprite):
 class Player(pygame.sprite.Sprite):
     animationCounter=0
     sprites_idle=[]
+    sprites_run=[]
     velocidade_alteracao_sprite=0
     quantidade_sprites_idle=0
     sprite_atual=0
@@ -120,6 +121,57 @@ class Player(pygame.sprite.Sprite):
         imagem = pygame.transform.scale(imagem, (altura_jogador, largura_jogador))
         Player.sprites_idle.append(imagem)
 
+        # Carrega as sprites run
+        imagem = pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/run1.png") # Carrega imagem 
+        imagem = pygame.transform.scale(imagem, (altura_jogador, largura_jogador)) # Escalona a imagem 
+        Player.sprites_run.append(imagem) # Guarda no array pra usar depois 
+
+        imagem = pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/run2.png") # Carrega imagem 
+        imagem = pygame.transform.scale(imagem, (altura_jogador, largura_jogador)) # Escalona a imagem 
+        Player.sprites_run.append(imagem) # Guarda no array pra usar depois 
+
+        imagem = pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/run3.png") # Carrega imagem 
+        imagem = pygame.transform.scale(imagem, (altura_jogador, largura_jogador)) # Escalona a imagem 
+        Player.sprites_run.append(imagem) # Guarda no array pra usar depois 
+
+        imagem = pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/run4.png") # Carrega imagem 
+        imagem = pygame.transform.scale(imagem, (altura_jogador, largura_jogador)) # Escalona a imagem 
+        Player.sprites_run.append(imagem) # Guarda no array pra usar depois 
+
+        imagem = pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/run5.png") # Carrega imagem 
+        imagem = pygame.transform.scale(imagem, (altura_jogador, largura_jogador)) # Escalona a imagem 
+        Player.sprites_run.append(imagem) # Guarda no array pra usar depois 
+
+        imagem = pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/run6.png") # Carrega imagem 
+        imagem = pygame.transform.scale(imagem, (altura_jogador, largura_jogador)) # Escalona a imagem 
+        Player.sprites_run.append(imagem) # Guarda no array pra usar depois 
+
+        imagem = pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/run7.png") # Carrega imagem 
+        imagem = pygame.transform.scale(imagem, (altura_jogador, largura_jogador)) # Escalona a imagem 
+        Player.sprites_run.append(imagem) # Guarda no array pra usar depois 
+
+        imagem = pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/run8.png") # Carrega imagem 
+        imagem = pygame.transform.scale(imagem, (altura_jogador, largura_jogador)) # Escalona a imagem 
+        Player.sprites_run.append(imagem) # Guarda no array pra usar depois 
+
+        imagem = pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/run9.png") # Carrega imagem 
+        imagem = pygame.transform.scale(imagem, (altura_jogador, largura_jogador)) # Escalona a imagem 
+        Player.sprites_run.append(imagem) # Guarda no array pra usar depois 
+
+        imagem = pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/run10.png") # Carrega imagem 
+        imagem = pygame.transform.scale(imagem, (altura_jogador, largura_jogador)) # Escalona a imagem 
+        Player.sprites_run.append(imagem) # Guarda no array pra usar depois 
+
+        imagem = pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/run11.png") # Carrega imagem 
+        imagem = pygame.transform.scale(imagem, (altura_jogador, largura_jogador)) # Escalona a imagem 
+        Player.sprites_run.append(imagem) # Guarda no array pra usar depois 
+
+        imagem = pygame.image.load("./pixel-adventure-1/Free/Main Characters/Virtual Guy/run12.png") # Carrega imagem 
+        imagem = pygame.transform.scale(imagem, (altura_jogador, largura_jogador)) # Escalona a imagem 
+        Player.sprites_run.append(imagem) # Guarda no array pra usar depois 
+
+        # trocar todas as sprintes idle por run
+
         self.image = Player.sprites_idle[0] # Define a sprite inicial do jogador
         self.rect = self.image.get_rect() # Cria a caixa de colisão
         self.rect.center = (SCREEN_WIDTH/2, SCREEN_HEIGHT/2) # Posiciona o jogador
@@ -129,6 +181,7 @@ class Player(pygame.sprite.Sprite):
         # Definir a velocidade de mudança das sprites idle, em número de quadros que cada sprite é exibida; Elas precisam ser todas cicladas 1 vez por segundo, independentemente de quantas sprites sejam. 
         # Player.velocidade_alteracao_sprite = int(FPS / Player.quantidade_sprites_idle) # Cicla as imagens todas 1x por segundo, independentemente de quantas imagens o player tenha; 
         Player.velocidade_alteracao_sprite = int(FPS/15) # Cicla as imagens 15 vezes por segundo. A cada 66,6 milisegundos ou 4 quadros se a taxa for de 60 FPS. 
+        # Player.velocidade_alteracao_sprite = 60 # Cicla a imagem uma vez por segundo apenas 
  
     def update(self):
         pressed_keys = pygame.key.get_pressed() # pega a tecla pressionada 
